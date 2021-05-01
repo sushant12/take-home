@@ -14,9 +14,10 @@ defmodule Tahmeel.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Tahmeel.PubSub},
       # Start the Endpoint (http/https)
-      TahmeelWeb.Endpoint
+      TahmeelWeb.Endpoint,
       # Start a worker by calling: Tahmeel.Worker.start_link(arg)
       # {Tahmeel.Worker, arg}
+      {Oban, oban_config()}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
@@ -30,5 +31,9 @@ defmodule Tahmeel.Application do
   def config_change(changed, _new, removed) do
     TahmeelWeb.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  defp oban_config do
+    Application.fetch_env!(:tahmeel, Oban)
   end
 end

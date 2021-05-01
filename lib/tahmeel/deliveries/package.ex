@@ -1,8 +1,8 @@
-defmodule Tahmeel.Deliveries.Order do
+defmodule Tahmeel.Deliveries.Package do
   use Ecto.Schema
   import Ecto.Changeset
-  @timestamps_opts [type: :utc_datetime_usec]
-  schema "orders" do
+
+  schema "packages" do
     field :drop_off_address, :string
     field :pick_up_address, :string
     field :weight, :float

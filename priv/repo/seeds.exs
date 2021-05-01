@@ -12,28 +12,36 @@
 
 alias Tahmeel.Deliveries
 
-Deliveries.create_order(%{
+Deliveries.create_package(%{
   pick_up_address: "address 1",
   drop_off_address: "address 2",
   weight: 12.04
 })
 
-Deliveries.create_order(%{
+Deliveries.create_package(%{
   pick_up_address: "address 3",
   drop_off_address: "address 4",
   weight: 12.04
 })
 
-Deliveries.create_order(%{
+%Deliveries.Package{
   pick_up_address: "address 5",
-  drop_off_address: "address 5",
-  weight: 12.04
-})
+  drop_off_address: "address 6",
+  weight: 12.04,
+  inserted_at:
+    NaiveDateTime.utc_now()
+    |> NaiveDateTime.add(-86400)
+    |> NaiveDateTime.truncate(:second)
+}
+|> Tahmeel.Repo.insert()
 
-%Deliveries.Order{
+%Deliveries.Package{
   pick_up_address: "address 7",
   drop_off_address: "address 8",
   weight: 12.04,
-  inserted_at: DateTime.utc_now() |> DateTime.add(-86400)
+  inserted_at:
+    NaiveDateTime.utc_now()
+    |> NaiveDateTime.add(-86400)
+    |> NaiveDateTime.truncate(:second)
 }
 |> Tahmeel.Repo.insert()

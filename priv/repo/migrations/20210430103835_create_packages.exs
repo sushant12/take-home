@@ -1,13 +1,13 @@
-defmodule Tahmeel.Repo.Migrations.CreateOrders do
+defmodule Tahmeel.Repo.Migrations.CreatePackages do
   use Ecto.Migration
 
   def change do
-    create table(:orders) do
+    create table(:packages) do
       add :drop_off_address, :string
       add :pick_up_address, :string
       add :weight, :float
 
-      timestamps(type: :utc_datetime)
+      timestamps()
     end
 
   end
