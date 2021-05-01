@@ -1,5 +1,6 @@
 defmodule TahmeelWeb.Router do
   use TahmeelWeb, :router
+  import ObanUi.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -15,6 +16,7 @@ defmodule TahmeelWeb.Router do
 
   scope "/", TahmeelWeb do
     pipe_through :browser
+    oban_web("/oban")
 
     get "/", PageController, :index
   end

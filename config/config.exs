@@ -32,10 +32,12 @@ config :tahmeel, Oban,
     Oban.Plugins.Pruner,
     {Oban.Plugins.Cron,
      crontab: [
-       {"@daily", Tahmeel.ObanWorkers.DailyOrderCollector}
+       {"* * * * *", Tahmeel.ObanWorkers.DailyOrderCollector}
      ]}
   ],
   queues: [periodic: 1]
+
+config :oban_ui, repo: Tahmeel.Repo, app_name: TahmeelWeb
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

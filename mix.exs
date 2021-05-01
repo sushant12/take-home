@@ -50,7 +50,8 @@ defmodule Tahmeel.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:oban, "~> 2.6.1"},
       {:mock, "~> 0.3.0", only: :test},
-      {:credo, "~> 1.5", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
+      {:oban_ui, path: "../oban_ui"}
     ]
   end
 
