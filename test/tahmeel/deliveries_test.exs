@@ -94,7 +94,7 @@ defmodule Tahmeel.DeliveriesTest do
                  pick_up_addresses: ["address 5", "address 4"],
                  drop_off_addresses: ["address 6", "address 7"],
                  total_weight: 24.08,
-                 ref_id: "PK-ABC"
+                 ref_num: "PK-ABC"
                }
       end
     end

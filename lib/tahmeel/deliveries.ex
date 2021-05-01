@@ -7,6 +7,7 @@ defmodule Tahmeel.Deliveries do
   alias Tahmeel.Repo
 
   alias Tahmeel.Deliveries.Package
+  alias Tahmeel.Deliveries.BulkOrder
 
   def create_package(attrs \\ %{}) do
     %Package{}
@@ -36,8 +37,14 @@ defmodule Tahmeel.Deliveries do
           package.drop_off_address | Map.get(bulk_order, :drop_off_addresses, [])
         ],
         total_weight: Map.get(bulk_order, :total_weight, 0) + package.weight,
-        ref_id: "PK-" <> Tahmeel.Utils.random_short_id()
+        ref_num: "PK-" <> Tahmeel.Utils.random_short_id()
       })
     end)
+  end
+
+  def save_bulk_order(attrs) do
+    %BulkOrder{}
+    |> BulkOrder.changeset(attrs)
+    |> Repo.insert()
   end
 end
