@@ -48,7 +48,6 @@ defmodule Tahmeel.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:oban, "~> 2.6.1"},
       {:mock, "~> 0.3.0", only: :test},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false}
     ]
