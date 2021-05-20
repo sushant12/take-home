@@ -17,7 +17,7 @@ defmodule Tahmeel.Application do
       TahmeelWeb.Endpoint,
       # Start a worker by calling: Tahmeel.Worker.start_link(arg)
       # {Tahmeel.Worker, arg}
-      Tahmeel.WorkerSupervisor
+      Tahmeel.Scheduler.WorkerSupervisor
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -24,13 +24,13 @@ defmodule Tahmeel.WorkerServer do
     Task.start(fn -> apply(worker, :run, []) end)
   end
 
-  defp schedule_work(cron_expr) do
-    ms =
-      Crontab.CronExpression.Parser.parse!(cron_expr)
-      |> Crontab.Scheduler.get_next_run_date!()
-      |> DateTime.from_naive!("Etc/UTC")
-      |> DateTime.diff(DateTime.utc_now(), :millisecond)
+  defp schedule_work(_cron_expr) do
+    # ms =
+    #   Crontab.CronExpression.Parser.parse!(cron_expr)
+    #   |> Crontab.Scheduler.get_next_run_date!()
+    #   |> DateTime.from_naive!("Etc/UTC")
+    #   |> DateTime.diff(DateTime.utc_now(), :millisecond)
 
-    Process.send_after(self(), :run_task, ms)
+    # Process.send_after(self(), :run_task, ms)
   end
 end
