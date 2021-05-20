@@ -23,7 +23,7 @@ defmodule Tahmeel.Scheduler.Cron do
 
   @impl true
   def handle_continue(:start, state) do
-    Process.send_after(self(), :evaluate, 60_000)
+    Process.send_after(self(), :evaluate, 3_000)
     {:noreply, state}
   end
 

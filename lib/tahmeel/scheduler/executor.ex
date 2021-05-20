@@ -14,9 +14,20 @@ defmodule Tahmeel.Scheduler.Executor do
   end
 
   @impl true
-  def handle_info({:notification, channel, msg}, state) do
-    IO.inspect(channel, label: "channel")
-    IO.inspect(msg, label: "msg")
+  def handle_info({:notification, _channel, _msg}, state) do
+    Task.Supervisor.async_nolink(Tahmeel.TaskSchedulerSupervisor, fn ->
+      Tahmeel.Workers.DemoWorker.run()
+    end)
+
+    {:noreply, state}
+  end
+
+  def handle_info({ref, _}, state) do
+    Process.demonitor(ref, [:flush])
+    {:noreply, state}
+  end
+
+  def handle_info({:DOWN, _, _, _, _}, state) do
     {:noreply, state}
   end
 end

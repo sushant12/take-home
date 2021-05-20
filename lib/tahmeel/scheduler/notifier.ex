@@ -27,7 +27,9 @@ defmodule Tahmeel.Scheduler.Notifier do
     decoded_msg = Jason.decode!(payload)
 
     state[:listeners]
-    |> Enum.each(fn {pid, _channel} -> send(pid, {:notification, channel, decoded_msg}) end)
+    |> Enum.each(fn {pid, _channel} ->
+      send(pid, {:notification, channel, decoded_msg})
+    end)
 
     {:noreply, state}
   end
