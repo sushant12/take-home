@@ -19,12 +19,7 @@ defmodule Tahmeel.Scheduler.Executor do
     Repo.fetch_available_workers()
     |> Enum.each(fn worker ->
       Task.Supervisor.async_nolink(Tahmeel.TaskSchedulerSupervisor, fn ->
-        worker =
-          worker
-          |> String.split(".")
-          |> Module.safe_concat()
-
-        worker.run()
+        worker_from_string(worker).run()
       end)
     end)
 
@@ -38,5 +33,11 @@ defmodule Tahmeel.Scheduler.Executor do
 
   def handle_info({:DOWN, _, _, _, _}, state) do
     {:noreply, state}
+  end
+
+  defp worker_from_string(worker_name) do
+    worker_name
+    |> String.split(".")
+    |> Module.safe_concat()
   end
 end
