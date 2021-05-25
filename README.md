@@ -6,7 +6,7 @@
 
 # About
 
-Implementation of periodic job with cron expression using OTP.
+Implementation of periodic job with cron expression using OTP and Postgres `LISTEN`, `NOTIFY`.
 
 To define periodic jobs:
 
