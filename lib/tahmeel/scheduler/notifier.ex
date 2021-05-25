@@ -3,6 +3,10 @@ defmodule Tahmeel.Scheduler.Notifier do
 
   alias Postgrex.Notifications
 
+  defmodule State do
+    defstruct listeners: [], conn: nil
+  end
+
   def start_link(_) do
     GenServer.start_link(__MODULE__, [], name: __MODULE__)
   end
@@ -13,12 +17,11 @@ defmodule Tahmeel.Scheduler.Notifier do
 
   @impl true
   def init(_) do
-    state = %{listeners: %{}, conn: nil}
-    {:ok, state, {:continue, :start}}
+    {:ok, %Tahmeel.Scheduler.Notifier.State{}, {:continue, :listen}}
   end
 
   @impl true
-  def handle_continue(:start, state) do
+  def handle_continue(:listen, state) do
     {:noreply, connect_and_listen(state)}
   end
 
@@ -26,7 +29,7 @@ defmodule Tahmeel.Scheduler.Notifier do
   def handle_info({:notification, _, _, channel, payload}, state) do
     decoded_msg = Jason.decode!(payload)
 
-    state[:listeners]
+    state.listeners
     |> Enum.each(fn {pid, _channel} ->
       send(pid, {:notification, channel, decoded_msg})
     end)

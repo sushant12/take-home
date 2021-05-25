@@ -28,7 +28,7 @@ config :phoenix, :json_library, Jason
 
 config :tahmeel, Scheduler,
   cron: [
-    {"@daily", Tahmeel.Workers.DailyOrderCollector},
+    {"* * * * *", Tahmeel.Workers.DailyOrderCollector},
     {"* * * * *", Tahmeel.Workers.DemoWorker}
   ]
 

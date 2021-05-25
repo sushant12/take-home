@@ -5,41 +5,45 @@ defmodule Tahmeel.Scheduler.Cron do
   use GenServer
 
   alias Tahmeel.Scheduler.Cron.Expression
+
   alias Tahmeel.Scheduler.Repo
 
-  def start_link(opts) do
-    GenServer.start_link(__MODULE__, opts, name: __MODULE__)
+  defmodule State do
+    defstruct conf: nil, crontab: []
+  end
+
+  def start_link(conf) do
+    GenServer.start_link(__MODULE__, conf, name: __MODULE__)
   end
 
   @impl true
-  def init([opts]) do
-    opts =
-      opts
-      |> Map.get(:cron)
-      |> parse_crontab()
+  def init([conf]) do
+    crontab = conf |> parse_crontab()
+    state = struct!(Tahmeel.Scheduler.Cron.State, conf: conf, crontab: crontab)
 
-    {:ok, opts, {:continue, :start}}
+    {:ok, state, {:continue, :schedule}}
   end
 
   @impl true
-  def handle_continue(:start, state) do
-    Process.send_after(self(), :evaluate, 3_000)
+  def handle_continue(:schedule, state) do
+    Process.send_after(self(), :evaluate, 59_000)
     {:noreply, state}
   end
 
   @impl true
   def handle_info(:evaluate, state) do
-    handle_continue(:start, state)
+    handle_continue(:schedule, state)
 
-    for {expr, worker} <- state, Expression.now?(expr, DateTime.utc_now()) do
-      Repo.insert(state: "running", worker: worker)
+    for {expr, worker} <- state.crontab, Expression.now?(expr, DateTime.utc_now()) do
+      Repo.insert(state: "available", worker: worker)
     end
 
     {:noreply, state}
   end
 
-  defp parse_crontab(crontab) do
-    crontab
+  defp parse_crontab(conf) do
+    conf
+    |> Map.fetch!(:cron)
     |> Enum.map(fn {expr, worker} ->
       {Expression.parse!(expr), worker}
     end)

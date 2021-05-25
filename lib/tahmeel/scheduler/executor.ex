@@ -2,21 +2,30 @@ defmodule Tahmeel.Scheduler.Executor do
   use GenServer
 
   alias Tahmeel.Scheduler.Notifier
+  alias Tahmeel.Scheduler.Repo
 
-  def start_link(opts) do
-    GenServer.start_link(__MODULE__, opts, name: __MODULE__)
+  def start_link(_) do
+    GenServer.start_link(__MODULE__, nil, name: __MODULE__)
   end
 
   @impl true
-  def init(opts) do
+  def init(_) do
     :ok = Notifier.listen(self(), "schedule_job_insert")
-    {:ok, opts}
+    {:ok, []}
   end
 
   @impl true
   def handle_info({:notification, _channel, _msg}, state) do
-    Task.Supervisor.async_nolink(Tahmeel.TaskSchedulerSupervisor, fn ->
-      Tahmeel.Workers.DemoWorker.run()
+    Repo.fetch_available_workers()
+    |> Enum.each(fn worker ->
+      Task.Supervisor.async_nolink(Tahmeel.TaskSchedulerSupervisor, fn ->
+        worker =
+          worker
+          |> String.split(".")
+          |> Module.safe_concat()
+
+        worker.run()
+      end)
     end)
 
     {:noreply, state}

@@ -9,7 +9,7 @@ defmodule Tahmeel.Scheduler.WorkerSupervisor do
   end
 
   @impl true
-  def init(nil) do
+  def init(_) do
     config = Config.new(Application.get_env(:tahmeel, Scheduler))
 
     children = [
