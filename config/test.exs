@@ -20,5 +20,3 @@ config :tahmeel, TahmeelWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
-
-config :tahmeel, Oban, queues: false, plugins: false
